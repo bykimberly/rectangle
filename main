@@ -1,0 +1,64 @@
+import check_input
+import rectangle
+
+
+def display_grid(grid):
+    '''passes in grid and displays contents of grid'''
+    for row in grid:
+      for item in row:
+        print(item, end="")
+      print()
+
+def reset_grid(grid):
+  '''passes in grid and overwrites contents with all "."s '''
+  for row in grid:
+    for item in range(len(row)):
+      row[item] = "."
+
+def place_rect(grid, rect):
+  '''passes in grid and rectangle. at location of rectangle (x, y) on grid, overwrites 
+  the "." with "*"s using width and height of rectangle'''
+  coord = rect.get_coords()  # [x,y]
+  x = coord[0]
+  y = coord[1]
+  for i in range(x, x + rect.w): 
+    for k in range(y, y + rect.h):
+      grid[k][i] = "*"
+
+def main():
+  grid = [[".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], ]
+  width = check_input.get_int_range("Enter rectangle width (1-5): ", 1, 5)
+  height = check_input.get_int_range("Enter rectangle height (1-5): ", 1, 5)
+  rect = rectangle.Rectangle(width, height)
+  choice = 0
+  while choice != 5:  # continues if user does not choose to quit
+    reset_grid(grid)
+    place_rect(grid, rect)
+    display_grid(grid)
+    choice = check_input.get_int_range("Enter Direction:\n1. Up\n2. Down \n3. Left\n4. Right\n5. Quit\n", 1, 5)
+    if choice == 1:  # up
+      rect.move_up()
+    elif choice == 2:  # down
+      rect.move_down()
+    elif choice == 3:  # left
+      rect.move_left()
+    elif choice == 4:  # right
+      rect.move_right()
+    elif choice == 5:  # quit
+      print("Bye!")
+      break
+    
+    if rect.x < 0:   # prevent rectangle from going outside left boundary 
+      rect.x = 0 
+      print("You cannot move left.") 
+    if rect.x + rect.w > len(grid):   # prevent rectangle from going outside right boundary
+      rect.x = len(grid[0]) - rect.w
+      print("You cannot move right.")
+    if rect.y < 0:   # prevent rectangle from going outside top boundary
+      rect.y = 0
+      print("You cannot move up.") 
+    if rect.y + rect.h > len(grid[0]):  # prevent rectangle from going outside bottom boundary
+      rect.y = len(grid) - rect.h
+      print("You cannot move down.")
+
+main()
